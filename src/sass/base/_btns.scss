@@ -66,3 +66,20 @@
 .btn-up__icon {
   fill: $light-color;
 }
+
+.dont-touch {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 20px;
+  width: 150px;
+  height: 70px;
+  background-color: red;
+  border-radius: 8px;
+  margin: 40px auto 0;
+
+  &:hover {
+    background-color: rgb(193, 0, 0);
+    scale: 1.1;
+  }
+}
