@@ -1,6 +1,5 @@
 #pagination {
   width: 280px;
-
   height: 40px;
   margin: 0 auto;
   margin-top: 40px;
@@ -10,7 +9,6 @@
   @media screen and (min-width: $tablet-width) {
     width: 374px;
   }
-
 }
 
 .tui-page-btn {
@@ -25,22 +23,22 @@
   font-size: 12px;
   line-height: calc(16 / 12);
   border-radius: 5px;
-  color: black;
+  color: $dark-color;
   transition: all 250ms ease-in-out;
   &:hover {
-    background: orange;
+    background: $press-color;
   }
 }
 .tui-is-selected {
-  color: black;
-  background: orange;
-  border-color: orange;
+  color: $dark-color;
+  background: $press-color;
+  border-color: $press-color;
 }
 
 .tui-pagination .tui-ico-ellip{
   width: 16px;
   height: 16px;
-  fill:orange;
+  fill:$press-color;
   transition: all 250ms ease-in-out;
 }
 .tui-prev-is-ellip, .tui-next-is-ellip {
@@ -50,7 +48,6 @@
   }
 }
 
-
 .tui-first, .tui-last {
   display: none;
 }
@@ -58,7 +55,8 @@
 .tui-prev {
   transform: rotate(180deg)
 }
+
 .tui-prev, .tui-next {
-background: #F7F7F7;
+background: $footer-bg-color;
 }
 
