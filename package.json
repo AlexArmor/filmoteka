@@ -18,6 +18,7 @@
     "url": "https://github.com/goitacademy/parcel-project-template/issues"
   },
   "dependencies": {
+
     "@swc/helpers": "^0.4.14",
     "axios": "^1.2.0",
     "modern-normalize": "^1.1.0",
