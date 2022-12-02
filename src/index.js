@@ -1,10 +1,10 @@
 import './js/footer-modal';
+import './js/button-up.js';
 import './js/modal.js';
 import ApiService from './js/apiService';
 import Movie from './js/movie';
 import MovieTemplate from './templates/movieTemplate.hbs';
 import Pagination from 'tui-pagination';
-// import 'tui-pagination/dist/tui-pagination.css';
 import { container, paginationSettings } from './js/pagination';
 import arrowIcon from './images/pagination-icons/arrow-right.svg';
 
@@ -49,6 +49,7 @@ async function onFormSubmit(e) {
 
   paginationSettings.searchType = 'inputSearch';
   paginationSettings.searchQuery = query;
+
   try {
     const {
       data: { results, total_results, page },
@@ -121,14 +122,13 @@ function initPagination({ page, itemsPerPage, totalItems }) {
   const pagination = new Pagination(container, options);
 
   paginationSettings.pagination = pagination;
-  // paginationSettings.pagination.reset(totalItems);
   pagination.on('afterMove', async ({ page }) => {
     if (paginationSettings.searchType === 'homeSearch') {
       apiService.page = page;
       window.scroll(0, 0);
       try {
         const {
-          data: { results },
+          data: { results, total_results },
         } = await apiService.getTrendingMovies();
         const markup = await parseObjects(results);
         refs.movieListRef.innerHTML = MovieTemplate(markup);
@@ -139,7 +139,7 @@ function initPagination({ page, itemsPerPage, totalItems }) {
       window.scroll(0, 0);
       try {
         const {
-          data: { results },
+          data: { results, total_results },
         } = await apiService.getMovieByName(
           paginationSettings.searchQuery,
           page
