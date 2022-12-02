@@ -1,6 +1,6 @@
-openFooterModal = document.querySelector('.footer-section__link');
-closeFooterModalBtn = document.querySelector('.footer-modal__btn');
-footerModal = document.querySelector('[data-footerModal]');
+const openFooterModal = document.querySelector('.footer-section__link');
+const closeFooterModalBtn = document.querySelector('.footer-modal__btn');
+const footerModal = document.querySelector('[data-footerModal]');
 
 function onOpenFooterModalClick(e) {
   e.preventDefault();
