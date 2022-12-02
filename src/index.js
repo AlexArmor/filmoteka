@@ -1,10 +1,10 @@
 import './js/footer-modal';
-import './js/button-up.js';
 import './js/modal.js';
 import ApiService from './js/apiService';
 import Movie from './js/movie';
 import MovieTemplate from './templates/movieTemplate.hbs';
 import Pagination from 'tui-pagination';
+// import 'tui-pagination/dist/tui-pagination.css';
 import { container, paginationSettings } from './js/pagination';
 import arrowIcon from './images/pagination-icons/arrow-right.svg';
 
@@ -48,12 +48,12 @@ async function onFormSubmit(e) {
   }
 
   paginationSettings.searchType = 'inputSearch';
-  paginationSettings.pagination.searchQuery = query;
+  paginationSettings.searchQuery = query;
   try {
     const {
       data: { results, total_results, page },
     } = await apiService.getMovieByName(
-      paginationSettings.pagination.searchQuery,
+      paginationSettings.searchQuery,
       paginationSettings.startPage
     );
     const newArr = await parseObjects(results);
@@ -107,13 +107,11 @@ function initPagination({ page, itemsPerPage, totalItems }) {
       page: '<a href="#" class="tui-page-btn">{{page}}</a>',
       currentPage:
         '<strong class="tui-page-btn tui-is-selected">{{page}}</strong>',
-      moveButton:
-        `<a href="#" class="tui-page-btn tui-{{type}}">
+      moveButton: `<a href="#" class="tui-page-btn tui-{{type}}">
           <span class="tui-ico-{{type}}"> <img src="${arrowIcon}" alt="arrow-icon">
           </span>
         </a>`,
-      disabledMoveButton:
-        `<span class="tui-page-btn tui-is-disabled tui-{{type}}"><span class="tui-ico-{{type}}"><img src="${arrowIcon}" alt="arrow-icon"></span></span>`,
+      disabledMoveButton: `<span class="tui-page-btn tui-is-disabled tui-{{type}}"><span class="tui-ico-{{type}}"><img src="${arrowIcon}" alt="arrow-icon"></span></span>`,
       moreButton:
         '<a href="#" class="tui-page-btn tui-{{type}}-is-ellip">' +
         '<span class="tui-ico-ellip">...</span>' +
@@ -130,7 +128,7 @@ function initPagination({ page, itemsPerPage, totalItems }) {
       window.scroll(0, 0);
       try {
         const {
-          data: { results, total_results },
+          data: { results },
         } = await apiService.getTrendingMovies();
         const markup = await parseObjects(results);
         refs.movieListRef.innerHTML = MovieTemplate(markup);
@@ -138,11 +136,12 @@ function initPagination({ page, itemsPerPage, totalItems }) {
         console.log(err.message);
       }
     } else if (paginationSettings.searchType === 'inputSearch') {
+      window.scroll(0, 0);
       try {
         const {
-          data: { results, total_results },
+          data: { results },
         } = await apiService.getMovieByName(
-          paginationSettings.pagination.searchQuery,
+          paginationSettings.searchQuery,
           page
         );
 

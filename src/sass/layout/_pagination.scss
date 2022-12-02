@@ -11,7 +11,9 @@
   }
 }
 
-.tui-page-btn {
+.tui-page-btn,
+.tui-first,
+.tui-last {
   display: flex;
   border: none;
   align-items: center;
@@ -35,28 +37,32 @@
   border-color: $press-color;
 }
 
-.tui-pagination .tui-ico-ellip{
+.tui-pagination .tui-ico-ellip {
   width: 16px;
   height: 16px;
-  fill:$press-color;
+  fill: $press-color;
   transition: all 250ms ease-in-out;
 }
-.tui-prev-is-ellip, .tui-next-is-ellip {
+.tui-prev-is-ellip,
+.tui-next-is-ellip {
   display: none;
   @media screen and (min-width: $tablet-width) {
     display: flex;
   }
 }
 
-.tui-first, .tui-last {
+.tui-first,
+.tui-last {
   display: none;
 }
 
 .tui-prev {
-  transform: rotate(180deg)
+  transform: rotate(180deg);
+  background-image: url(../images/pagination-icons/arrow-right.svg);
 }
 
-.tui-prev, .tui-next {
-background: $footer-bg-color;
+.tui-prev,
+.tui-next .tui-first,
+.tui-last {
+  background: $footer-bg-color;
 }
-
