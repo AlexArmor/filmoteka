@@ -23,6 +23,15 @@ body {
   font-family: 'Roboto', sans-serif;
 }
 
+.shock-content {
+  background: url(../images/background-it.jpg);
+  width: 100vw;
+  height: 100vh;
+  background-position: center center;
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+
 .title-blackout {
   color: red;
   font-size: 100px;
