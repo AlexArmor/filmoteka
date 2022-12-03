@@ -1,7 +1,7 @@
 .container {
   padding: 0 20px;
   margin: 0 auto;
-
+  width: 320px;
   @media screen and (min-width: $phone-width) {
     width: $phone-width;
   }

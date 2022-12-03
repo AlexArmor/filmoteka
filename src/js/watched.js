@@ -6,28 +6,31 @@ const library = document.querySelector('.watched');
 const watchedBtn = document.querySelector('.header__bnt--watched');
 const queueBtn = document.querySelector('.header__bnt--queue');
 
-const myLibraryApi = new ApiService();
+export const myLibraryApi = new ApiService();
+
 
 watchedBtn.addEventListener('click', makeLibraryCollectionsWatched);
 queueBtn.addEventListener('click', makeLibraryCollectionsQueue);
 
-(async () => {
-  makeLibraryCollections(LISTNAME_TO_WATCH);
+(async () => {  
+  makeLibraryCollections (LISTNAME_TO_WATCH)  
 })();
 
 function makeLibraryCollectionsWatched() {
-  library.innerHTML = '';
-  makeLibraryCollections(LISTNAME_TO_WATCH);
+  watchedBtn.classList.add('header__bnt--active')
+  queueBtn.classList.remove('header__bnt--active')
+  makeLibraryCollections (LISTNAME_TO_WATCH)  
 }
 function makeLibraryCollectionsQueue() {
-  library.innerHTML = '';
-  makeLibraryCollections(LISTNAME_TO_QUEUE);
+  queueBtn.classList.add('header__bnt--active')
+  watchedBtn.classList.remove('header__bnt--active')
+  makeLibraryCollections (LISTNAME_TO_QUEUE)  
 }
 
-function makeLibraryCollections(localStorageKey) {
+export function makeLibraryCollections(localStorageKey) {
   const watchedFilms = localStorage.getItem(localStorageKey);
   const parsedWatchedFilms = JSON.parse(watchedFilms);
-
+  library.innerHTML = ''
   if (watchedFilms) {
     parsedWatchedFilms.forEach(async el => {
       try {
@@ -55,19 +58,25 @@ function makeLibraryCollections(localStorageKey) {
       } catch (err) {
         console.log(err.message);
       }
-    });
-    if (parsedWatchedFilms.length === 0) {
-      const markup = `
-          <li class='empty__item'>
-          <img
-            class='empty__img'
-            width='440'
-            src="${nothingImg}"
-            loading='lazy'
-          />
-          </li>
-        `;
-      library.innerHTML = markup;
-    }
+    })
+  } else {
+    markupImg ()
   }
+  if (parsedWatchedFilms.length === 0) {
+    markupImg ()
+  }
+}
+
+function markupImg () {
+  const markup = `
+  <li class='empty__item'>
+  <img
+    class='empty__img'
+    width='440'
+    src="${nothingImg}"
+    loading='lazy'
+  />
+  </li>
+`
+library.innerHTML = markup;    
 }

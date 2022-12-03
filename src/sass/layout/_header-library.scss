@@ -39,7 +39,7 @@
 
 
 
-.header__btn{
+.header__btns{
     height: 140px;
     width: 100%;
     display: flex;
@@ -66,28 +66,30 @@ a{
     color: $light-color;
 }
 
+.header__bnt{
+  height: 42px;
+  border-radius: 5px;
+  color: $light-color;
+  background: transparent;
+  border: 1px solid $light-color;
+}
 
 .header__bnt--watched{
-    width: 148px;
-    height: 42px;
-    border: none;
-    background-color: $press-color;
-    color: $light-color;
-    border-radius: 5px;
+  width: 148px;
 }
 
 .header__bnt--queue{
-    width: 147px;
-    height: 42px;
-    background: transparent;
-    border: 1px solid $light-color;
-    color: $light-color;
-    border-radius: 5px;
+  width: 147px;
 }
 
 .header__bnt--watched:hover,
 .header__bnt--watched:focus{
   box-shadow: 0 0em 0.7em 0em $press-color;
+}
+
+.header__bnt--active {
+  border: none;
+  background-color: $press-color;
 }
 
 .header__bnt--queue:hover,
