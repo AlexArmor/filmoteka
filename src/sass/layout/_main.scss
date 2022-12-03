@@ -78,8 +78,24 @@
 }
 
 .movie__description {
+  display: flex;
+  gap: 8px;
+  align-items: center;
   color: $press-color;
+}
+
+.movie__genres {
   white-space: nowrap;
   text-overflow: ellipsis;
   overflow: hidden;
+}
+
+.movie__rating {
+  display: inline-block;
+  font-size: 12px;
+  font-weight: 500;
+  color: $light-color;
+  padding: 3px 12px;
+  background-color: $press-color;
+  border-radius: 5px;
 }
