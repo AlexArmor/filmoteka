@@ -1,4 +1,5 @@
 import Pagination from 'tui-pagination';
+import { Loading } from 'notiflix';
 import arrowIcon from '../images/pagination-icons/arrow-right.svg';
 import { apiService, parseObjects, refs } from '../index';
 import MovieTemplate from '../templates/movieTemplate.hbs';
@@ -42,6 +43,7 @@ export function initPagination({ page, itemsPerPage, totalItems }) {
     if (paginationSettings.searchType === 'homeSearch') {
       apiService.page = page;
       window.scroll(0, 0);
+      Loading.standard();
       try {
         const {
           data: { results, total_results },
@@ -50,9 +52,12 @@ export function initPagination({ page, itemsPerPage, totalItems }) {
         refs.movieListRef.innerHTML = MovieTemplate(markup);
       } catch (err) {
         console.log(err.message);
+      } finally {
+        Loading.remove();
       }
     } else if (paginationSettings.searchType === 'inputSearch') {
       window.scroll(0, 0);
+      Loading.standard();
       try {
         const {
           data: { results, total_results },
@@ -65,6 +70,8 @@ export function initPagination({ page, itemsPerPage, totalItems }) {
         refs.movieListRef.innerHTML = MovieTemplate(newArr);
       } catch (err) {
         console.log(err.message);
+      } finally {
+        Loading.remove();
       }
     }
   });
