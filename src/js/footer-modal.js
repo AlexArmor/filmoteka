@@ -12,15 +12,18 @@ function onOpenFooterModalClick(e) {
 }
 
 function onCloseFooterModalClick(e) {
-  e.preventDefault();
-  footerModal.classList.add('is-hidden');
-  document.body.classList.remove('overflow');
+  closeModal();
 }
 
 function onEscClose(e) {
   if (e.key === 'Escape') {
-    footerModal.classList.add('is-hidden');
-    document.body.classList.remove('overflow');
+    closeModal();
+  }
+}
+
+function onBackdropClick(event) {
+  if (event.target === event.currentTarget) {
+    closeModal();
   }
 }
 
@@ -30,12 +33,6 @@ function closeModal() {
   footerModal.removeEventListener('click', onBackdropClick);
   document.removeEventListener('keydown', onEscClose);
   closeFooterModalBtn.removeEventListener('click', onCloseFooterModalClick);
-}
-
-function onBackdropClick(event) {
-  if (event.target === event.currentTarget) {
-    closeModal();
-  }
 }
 
 openFooterModal.addEventListener('click', onOpenFooterModalClick);
