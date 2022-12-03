@@ -10,7 +10,15 @@
     <div class='movie__info'>
       <p class='movie__name'>{{this.title}}</p>
       <p class='movie__description'>
-        {{this.genres}}
+        {{#unless this.genres}}
+          {{#unless this.releaseDate}}
+            No information about the movie
+          {{/unless}}
+        {{/unless}}
+
+        {{#if this.genres}}
+          <span class='movie__genres'>{{this.genres}}</span>
+        {{/if}}
 
         {{#if this.genres}}
           {{#if this.releaseDate}}
@@ -18,13 +26,13 @@
           {{/if}}
         {{/if}}
 
-        {{this.releaseDate}}
+        {{#if this.releaseDate}}
+          <span class='movie__year'>{{this.releaseDate}}</span>
+        {{/if}}
 
-        {{#unless this.genres}}
-          {{#unless this.releaseDate}}
-            No information about the movie
-          {{/unless}}
-        {{/unless}}
+        {{#if this.rating}}
+          <span class='movie__rating'>{{this.rating}}</span>
+        {{/if}}
       </p>
     </div>
   </li>

@@ -1,3 +1,4 @@
+import { Loading } from 'notiflix';
 import './js/footer-modal';
 import './js/button-up.js';
 import './js/modal.js';
@@ -16,6 +17,7 @@ refs.formRef.addEventListener('submit', onFormSubmit);
 export const apiService = new ApiService();
 
 async function onPageLoad(page) {
+  Loading.standard();
   try {
     const {
       data: { results, total_results },
@@ -32,6 +34,8 @@ async function onPageLoad(page) {
     refs.movieListRef.innerHTML = MovieTemplate(markup);
   } catch (err) {
     console.log(err.message);
+  } finally {
+    Loading.remove();
   }
 }
 
@@ -44,6 +48,8 @@ async function onFormSubmit(e) {
   if (query === '') {
     return;
   }
+
+  Loading.standard();
 
   paginationSettings.searchType = 'inputSearch';
   paginationSettings.searchQuery = query;
@@ -80,6 +86,7 @@ async function onFormSubmit(e) {
     console.log(err.message);
   } finally {
     e.target.reset();
+    Loading.remove();
   }
 }
 

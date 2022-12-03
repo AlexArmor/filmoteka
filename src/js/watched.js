@@ -41,6 +41,7 @@ export function makeLibraryCollections(localStorageKey) {
         const img = movieById.poster_path
           ? `https://image.tmdb.org/t/p/original/${movieById.poster_path}`
           : 'https://dummyimage.com/395x592/000/fff.jpg&text=MOVIE+POSTER+IS+NOT+DEFINED';
+        const rating = movieById.vote_average.toFixed(1);
 
         const MovieObj = {
           id: movieById.id,
@@ -48,6 +49,7 @@ export function makeLibraryCollections(localStorageKey) {
           title: movieById.title,
           genres,
           releaseDate: date,
+          rating,
         };
 
         const markup = MovieTemplate([MovieObj]);
