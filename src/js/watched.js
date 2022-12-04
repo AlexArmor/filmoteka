@@ -2,6 +2,7 @@ import ApiService from './apiService';
 import { Loading } from 'notiflix';
 import { LISTNAME_TO_WATCH, LISTNAME_TO_QUEUE } from './modal';
 import nothingImg from '../images/empty_library.jpg';
+import nothingImgMarkup from '../templates/nothingImgMarkup.hbs';
 import MovieTemplate from '../templates/movieTemplate.hbs';
 const libraryWatch = document.querySelector('.watched');
 const libraryQueue = document.querySelector('.queue');
@@ -36,36 +37,10 @@ export function makeLibraryCollections(
   const watchedFilms = localStorage.getItem(localStorageKey);
   const parsedWatchedFilms = JSON.parse(watchedFilms);
   libraryDelete.innerHTML = '';
+  library.innerHTML = '';
   if (watchedFilms) {
     parsedWatchedFilms.forEach(async el => {
-      Loading.standard();
-      try {
-        const res = await myLibraryApi.getMovieById(el);
-        const movieById = res.data;
-        const genres = movieById.genres.map(el => el.name).join(', ');
-        const date = new Date(movieById.release_date).getFullYear() || '';
-        const img = movieById.poster_path
-          ? `https://image.tmdb.org/t/p/original/${movieById.poster_path}`
-          : 'https://dummyimage.com/395x592/000/fff.jpg&text=MOVIE+POSTER+IS+NOT+DEFINED';
-        const rating = movieById.vote_average.toFixed(1);
-
-        const MovieObj = {
-          id: movieById.id,
-          img,
-          title: movieById.title,
-          genres,
-          releaseDate: date,
-          rating,
-        };
-
-        const markup = MovieTemplate([MovieObj]);
-
-        library.insertAdjacentHTML('beforeend', markup);
-      } catch (err) {
-        console.log(err.message);
-      } finally {
-        Loading.remove();
-      }
+      createElementCard(el, library, myLibraryApi);
     });
   } else {
     markupImg(library);
@@ -76,15 +51,37 @@ export function makeLibraryCollections(
 }
 
 export function markupImg(library) {
-  const markup = `
-  <li class='empty__item'>
-  <img
-    class='empty__img'
-    width='440'
-    src="${nothingImg}"
-    loading='lazy'
-  />
-  </li>
-`;
+  const markup = nothingImgMarkup(nothingImg);
   library.innerHTML = markup;
+}
+
+export async function createElementCard(id, library, api) {
+  Loading.standard();
+  try {
+    const res = await api.getMovieById(id);
+    const movieById = res.data;
+    const genres = movieById.genres.map(el => el.name).join(', ');
+    const date = new Date(movieById.release_date).getFullYear() || '';
+    const img = movieById.poster_path
+      ? `https://image.tmdb.org/t/p/original/${movieById.poster_path}`
+      : 'https://dummyimage.com/395x592/000/fff.jpg&text=MOVIE+POSTER+IS+NOT+DEFINED';
+    const rating = movieById.vote_average.toFixed(1);
+
+    const MovieObj = {
+      id: movieById.id,
+      img,
+      title: movieById.title,
+      genres,
+      releaseDate: date,
+      rating,
+    };
+
+    const markup = MovieTemplate([MovieObj]);
+
+    library.insertAdjacentHTML('beforeend', markup);
+  } catch (err) {
+    console.log(err.message);
+  } finally {
+    Loading.remove();
+  }
 }

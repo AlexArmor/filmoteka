@@ -2,6 +2,8 @@ import { Notify, Loading } from 'notiflix';
 import ApiService from './apiService';
 import TrailerTemplate from '../templates/trailerTemplate.hbs';
 import nothingImg from '../images/empty_library.jpg';
+import nothingImgMarkup from '../templates/nothingImgMarkup.hbs';
+import MovieTemplate from '../templates/movieTemplate.hbs';
 const youtubeContainerEl = document.querySelector(
   '.modal_youtube_video_container'
 );
@@ -25,10 +27,11 @@ const addToQueueListBtn = document.querySelector('.js-toAddtoQue');
 const showTrailerBtn = document.querySelector('.modal_movie_trailer--ref');
 let addedToWatchedArray = [];
 let addedToQueueArray = [];
+let elementClassList;
 
 export const LISTNAME_TO_WATCH = 'added-to-watched';
 export const LISTNAME_TO_QUEUE = 'added-to-queue';
-
+const newMovie = new ApiService();
 const onClickOpenModal = event => {
   if (event.target.tagName === 'UL') {
     return;
@@ -39,8 +42,7 @@ const onClickOpenModal = event => {
     cssAnimationDuration: 0,
   });
   const movieId = event.target.closest('li').getAttribute('data-id');
-  const newMovie = new ApiService();
-
+  elementClassList = event.currentTarget.classList.value;
   newMovie
     .getMovieById(movieId)
     .then(object => {
@@ -140,12 +142,14 @@ const addToWatchedList = event => {
         `[data-id="${movieIdModal}"]`
       );
 
-      modalWindowEl.close();
-      setTimeout(() => {
-        itemDelete.remove();
-      }, 300);
-      if (addedToWatchedArray.length === 0) {
-        markupImg(libraryWatch);
+      // modalWindowEl.close();
+      if (elementClassList.includes('watched')) {
+        setTimeout(() => {
+          itemDelete.remove();
+        }, 300);
+        if (addedToWatchedArray.length === 0) {
+          markupImg(libraryWatch);
+        }
       }
     }
 
@@ -159,6 +163,9 @@ const addToWatchedList = event => {
     addToWatchedListBtn.style.color = 'white';
     addToWatchedListBtn.style.backgroundColor = '#ff6b02';
     addToWatchedListBtn.textContent = 'REMOVE FROM WATCHED';
+    if (elementClassList.includes('watched')) {
+      addMovieCard(movieIdModal, libraryWatch);
+    }
     return localStorage.setItem(
       LISTNAME_TO_WATCH,
       JSON.stringify(addedToWatchedArray)
@@ -186,12 +193,14 @@ const addToQueueList = event => {
         `[data-id="${movieIdModal}"]`
       );
 
-      modalWindowEl.close();
-      setTimeout(() => {
-        itemDelete.remove();
-      }, 300);
-      if (addedToQueueArray.length === 0) {
-        markupImg(libraryQueue);
+      // modalWindowEl.close();
+      if (elementClassList.includes('queue')) {
+        setTimeout(() => {
+          itemDelete.remove();
+        }, 300);
+        if (addedToQueueArray.length === 0) {
+          markupImg(libraryQueue);
+        }
       }
     }
 
@@ -205,6 +214,10 @@ const addToQueueList = event => {
     addToQueueListBtn.style.color = 'white';
     addToQueueListBtn.style.backgroundColor = '#ff6b02';
     addToQueueListBtn.textContent = 'REMOVE FROM QUEUE';
+    if (elementClassList.includes('queue')) {
+      addMovieCard(movieIdModal, libraryQueue);
+    }
+
     return localStorage.setItem(
       LISTNAME_TO_QUEUE,
       JSON.stringify(addedToQueueArray)
@@ -225,15 +238,34 @@ addToQueueListBtn.addEventListener('click', addToQueueList);
 // localStorage.clear()
 
 export function markupImg(library) {
-  const markup = `
-  <li class='empty__item'>
-  <img
-    class='empty__img'
-    width='440'
-    src="${nothingImg}"
-    loading='lazy'
-  />
-  </li>
-`;
+  const markup = nothingImgMarkup(nothingImg);
   library.innerHTML = markup;
+}
+
+async function addMovieCard(id, library) {
+  try {
+    const res = await newMovie.getMovieById(id);
+    const movieById = res.data;
+    const genres = movieById.genres.map(el => el.name).join(', ');
+    const date = new Date(movieById.release_date).getFullYear() || '';
+    const img = movieById.poster_path
+      ? `https://image.tmdb.org/t/p/original/${movieById.poster_path}`
+      : 'https://dummyimage.com/395x592/000/fff.jpg&text=MOVIE+POSTER+IS+NOT+DEFINED';
+    const rating = movieById.vote_average.toFixed(1);
+
+    const MovieObj = {
+      id: movieById.id,
+      img,
+      title: movieById.title,
+      genres,
+      releaseDate: date,
+      rating,
+    };
+
+    const markup = MovieTemplate([MovieObj]);
+
+    library.insertAdjacentHTML('afterbegin', markup);
+  } catch (err) {
+    console.log(err.message);
+  }
 }
