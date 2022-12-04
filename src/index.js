@@ -1,4 +1,5 @@
 import { Loading } from 'notiflix';
+import './js/theme-slider';
 import './js/footer-modal';
 import './js/button-up.js';
 import './js/modal.js';
