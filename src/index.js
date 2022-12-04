@@ -5,11 +5,9 @@ import './js/modal.js';
 import ApiService from './js/apiService';
 import Movie from './js/movie';
 import MovieTemplate from './templates/movieTemplate.hbs';
-import Pagination from 'tui-pagination';
-import { container, paginationSettings } from './js/pagination';
-import arrowIcon from './images/pagination-icons/arrow-right.svg';
+import { paginationSettings, initPagination } from './js/pagination';
 
-const refs = {
+export const refs = {
   movieListRef: document.querySelector('.movie-list'),
   formRef: document.querySelector('.header__search'),
 };
@@ -92,7 +90,7 @@ async function onFormSubmit(e) {
   }
 }
 
-async function parseObjects(arr) {
+export async function parseObjects(arr) {
   try {
     const {
       data: { genres },
@@ -102,61 +100,4 @@ async function parseObjects(arr) {
   } catch (err) {
     console.log(err.message);
   }
-}
-
-function initPagination({ page, itemsPerPage, totalItems }) {
-  const options = {
-    totalItems,
-    itemsPerPage,
-    page,
-    visiblePages: 5,
-    centerAlign: false,
-    template: {
-      page: '<a href="#" class="tui-page-btn">{{page}}</a>',
-      currentPage:
-        '<strong class="tui-page-btn tui-is-selected">{{page}}</strong>',
-      moveButton: `<a href="#" class="tui-page-btn tui-{{type}}">
-          <span class="tui-ico-{{type}}"> <img src="${arrowIcon}" alt="arrow-icon">
-          </span>
-        </a>`,
-      disabledMoveButton: `<span class="tui-page-btn tui-is-disabled tui-{{type}}"><span class="tui-ico-{{type}}"><img src="${arrowIcon}" alt="arrow-icon"></span></span>`,
-      moreButton:
-        '<a href="#" class="tui-page-btn tui-{{type}}-is-ellip">' +
-        '<span class="tui-ico-ellip">...</span>' +
-        '</a>',
-    },
-  };
-  const pagination = new Pagination(container, options);
-
-  paginationSettings.pagination = pagination;
-  pagination.on('afterMove', async ({ page }) => {
-    if (paginationSettings.searchType === 'homeSearch') {
-      apiService.page = page;
-      window.scroll(0, 0);
-      try {
-        const {
-          data: { results, total_results },
-        } = await apiService.getTrendingMovies();
-        const markup = await parseObjects(results);
-        refs.movieListRef.innerHTML = MovieTemplate(markup);
-      } catch (err) {
-        console.log(err.message);
-      }
-    } else if (paginationSettings.searchType === 'inputSearch') {
-      window.scroll(0, 0);
-      try {
-        const {
-          data: { results, total_results },
-        } = await apiService.getMovieByName(
-          paginationSettings.searchQuery,
-          page
-        );
-
-        const newArr = await parseObjects(results);
-        refs.movieListRef.innerHTML = MovieTemplate(newArr);
-      } catch (err) {
-        console.log(err.message);
-      }
-    }
-  });
 }
