@@ -2,6 +2,7 @@ body.theme-dark {
   background-image: url('../images/dark-theme/dark-theme-bg.jpg');
   background-position: center;
   background-size: contain;
+
   background-repeat: repeat;
 
   .movie__name {
@@ -53,6 +54,7 @@ body.theme-dark {
   .modal_description--text,
   .modal_description--title,
   .modal_btn,
+
   .modal_movie_trailer--ref,
   .developersTeam {
     color: $light-color;
