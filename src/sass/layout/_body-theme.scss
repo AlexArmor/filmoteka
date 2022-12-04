@@ -1,4 +1,4 @@
-body.dark {
+body.theme-dark {
   background-image: url('../images/dark-theme/dark-theme-bg.jpg');
   background-position: center;
   background-size: contain;
@@ -34,5 +34,39 @@ body.dark {
 
   .footer-section__link {
     color: $footer-bg-color;
+  }
+
+  .modal,
+  .footer-modal {
+    background: rgb(0, 0, 0);
+    background: linear-gradient(
+      120deg,
+      rgba(0, 0, 0, 1) 0%,
+      rgba(51, 0, 0, 1) 70%,
+      rgba(0, 0, 0, 1) 100%
+    );
+  }
+
+  .modal_info_name,
+  .modal_specific--item,
+  .modal_specific--value,
+  .modal_description--text,
+  .modal_description--title,
+  .modal_btn,
+  .modal_movie_trailer--ref {
+    color: $light-color;
+  }
+
+  .modal_btn,
+  .modal_movie_trailer--ref {
+    border-color: $light-color;
+  }
+
+  .close_btn__svg {
+    stroke: $light-color;
+  }
+
+  .footer-modal {
+    border: 1px solid $press-color;
   }
 }

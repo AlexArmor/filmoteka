@@ -1,6 +1,6 @@
 .modal_window {
-padding: 0;
-border: none;
+  padding: 0;
+  border: none;
 }
 
 .modal {
@@ -10,17 +10,16 @@ border: none;
   margin: 0 auto;
   padding: 40px 12px;
 
-  @media screen and (min-width: 768px) and (max-width: 1279px)
-{
-  width: 704px;
-  padding: 40px 72px 10px 36px;
+  @media screen and (min-width: 768px) and (max-width: 1279px) {
+    width: 704px;
+    padding: 40px 72px 10px 36px;
+  }
+  @media screen and (max-width: 767.5px) {
+    width: 280px;
+    padding: 48px 20px 10px;
+    flex-direction: column;
+  }
 }
-  @media screen and (max-width: 767.5px)
-{
-  width: 280px;
-  padding: 48px 20px 10px;
-  flex-direction: column;
-}}
 
 .modal_close_btn {
   position: absolute;
@@ -41,23 +40,20 @@ border: none;
 
 .modal_close_btn:hover .close_btn__svg {
   stroke: $press-color;
- }
+}
 
 .close_btn__svg {
-  stroke:$dark-color;
- }
-
+  stroke: $dark-color;
+}
 
 .modal_image {
   min-width: 375px;
   border-radius: 5px;
 
-  @media screen and (min-width: 768px) and (max-width: 1279px)
-  {
+  @media screen and (min-width: 768px) and (max-width: 1279px) {
     min-width: 264px;
   }
-    @media screen and (max-width: 767.5px)
-  {
+  @media screen and (max-width: 767.5px) {
     min-width: 240px;
   }
 }
@@ -65,12 +61,10 @@ border: none;
 .modal_info {
   margin-left: 16px;
 
-  @media screen and (min-width: 768px) and (max-width: 1279px)
-  {
+  @media screen and (min-width: 768px) and (max-width: 1279px) {
     margin-left: 68px;
   }
-    @media screen and (max-width: 767.5px)
-  {
+  @media screen and (max-width: 767.5px) {
     margin-left: 0;
   }
 }
@@ -83,12 +77,10 @@ border: none;
   line-height: 35px;
   color: $dark-color;
 
-  @media screen and (min-width: 768px) and (max-width: 1279px)
-  {
+  @media screen and (min-width: 768px) and (max-width: 1279px) {
     font-size: 20px;
   }
-    @media screen and (max-width: 767.5px)
-  {
+  @media screen and (max-width: 767.5px) {
     font-size: 20px;
     margin: 20px 0;
   }
@@ -116,12 +108,10 @@ border: none;
   line-height: 16px;
   color: #8c8c8c;
 
-  @media screen and (min-width: 768px) and (max-width: 1279px)
-  {
+  @media screen and (min-width: 768px) and (max-width: 1279px) {
     min-width: 108px;
   }
-    @media screen and (max-width: 767.5px)
-  {
+  @media screen and (max-width: 767.5px) {
     min-width: 108px;
   }
 }
@@ -178,12 +168,10 @@ border: none;
   flex-direction: row;
   gap: 10px;
 
-  @media screen and (min-width: 768px) and (max-width: 1279px)
-  {
+  @media screen and (min-width: 768px) and (max-width: 1279px) {
     margin-left: 0;
   }
-    @media screen and (max-width: 767.5px)
-  {
+  @media screen and (max-width: 767.5px) {
     margin-left: 0;
     justify-content: space-around;
   }
@@ -195,12 +183,10 @@ border: none;
   border: 1px solid rgba(0, 0, 0, 1);
   color: $dark-color;
 
-  @media screen and (min-width: 768px) and (max-width: 1279px)
-  {
+  @media screen and (min-width: 768px) and (max-width: 1279px) {
     width: 125px;
   }
-    @media screen and (max-width: 767.5px)
-  {
+  @media screen and (max-width: 767.5px) {
     width: 110px;
   }
 }
@@ -225,15 +211,16 @@ border: none;
   justify-content: center;
   text-transform: uppercase;
   color: $dark-color;
-  transition: background-color 250ms cubic-bezier(0.4, 0, 0.2, 1), color 250ms cubic-bezier(0.4, 0, 0.2, 1), border 250ms cubic-bezier(0.4, 0, 0.2, 1), fill 250ms cubic-bezier(0.4, 0, 0.2, 1);
+  transition: background-color 250ms cubic-bezier(0.4, 0, 0.2, 1),
+    color 250ms cubic-bezier(0.4, 0, 0.2, 1),
+    border 250ms cubic-bezier(0.4, 0, 0.2, 1),
+    fill 250ms cubic-bezier(0.4, 0, 0.2, 1);
 
-  @media screen and (min-width: 768px) and (max-width: 1279px)
-  {
+  @media screen and (min-width: 768px) and (max-width: 1279px) {
     margin: 20 auto;
     width: 125px;
   }
-    @media screen and (max-width: 767.5px)
-  {
+  @media screen and (max-width: 767.5px) {
     margin: 20 auto;
     width: 125px;
   }
@@ -252,7 +239,7 @@ border: none;
 }
 
 .modal_movie_trailer--ref:hover .movie_trailer__svg {
-fill: #ffffff;
+  fill: #ffffff;
 }
 
 .modal_youtube_video_container {
@@ -265,19 +252,14 @@ fill: #ffffff;
 .modal_youtube_video {
   margin-left: 8px;
   border-radius: 10px;
-  
 
-  @media screen and (min-width: 768px) and (max-width: 1279px)
-  {
-    margin: 0 auto;
-    
-  }
-    @media screen and (max-width: 767.5px)
-  {
+  @media screen and (min-width: 768px) and (max-width: 1279px) {
     margin: 0 auto;
   }
-  @media screen and (min-width: 1280px)
-  {
+  @media screen and (max-width: 767.5px) {
+    margin: 0 auto;
+  }
+  @media screen and (min-width: 1280px) {
     width: 280px;
     height: 210px;
   }
