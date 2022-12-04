@@ -4,6 +4,7 @@ import TrailerTemplate from '../templates/trailerTemplate.hbs';
 import nothingImg from '../images/empty_library.jpg';
 import nothingImgMarkup from '../templates/nothingImgMarkup.hbs';
 import MovieTemplate from '../templates/movieTemplate.hbs';
+import { async } from 'regenerator-runtime';
 const youtubeContainerEl = document.querySelector(
   '.modal_youtube_video_container'
 );
@@ -32,7 +33,7 @@ let elementClassList;
 export const LISTNAME_TO_WATCH = 'added-to-watched';
 export const LISTNAME_TO_QUEUE = 'added-to-queue';
 const newMovie = new ApiService();
-const onClickOpenModal = event => {
+const onClickOpenModal = async event => {
   if (event.target.tagName === 'UL') {
     return;
   }
@@ -43,74 +44,71 @@ const onClickOpenModal = event => {
   });
   const movieId = event.target.closest('li').getAttribute('data-id');
   elementClassList = event.currentTarget.classList.value;
-  newMovie
-    .getMovieById(movieId)
-    .then(object => {
-      addToWatchedListBtn.dataset.movieId = movieId;
-      addToQueueListBtn.dataset.movieId = movieId;
-      titleNameValueEl.textContent = object.data.original_title;
-      voteValueEl.textContent = object.data.vote_average;
-      votesSumValueEl.textContent = object.data.vote_count;
-      popularityValueEl.textContent = object.data.popularity;
-      original_titleValueEl.textContent = object.data.original_title;
-      overviewValueEl.textContent = object.data.overview;
-      genresValueEl.textContent = object.data.genres
-        .map(el => el.name)
-        .join(', ');
-      imageEl.src = event.target.closest('LI').querySelector('img').src;
-      modalWindowEl.showModal();
-    })
-    .catch(err =>
-      Notify.info('Sorry, this movie is currently unavailable!', {
-        fontSize: '16px',
-        width: '200px',
-      })
-    )
-    .finally(Loading.remove);
+  try {
+    const object = await newMovie.getMovieById(movieId);
+    addToWatchedListBtn.dataset.movieId = movieId;
+    addToQueueListBtn.dataset.movieId = movieId;
+    titleNameValueEl.textContent = object.data.original_title;
+    voteValueEl.textContent = object.data.vote_average;
+    votesSumValueEl.textContent = object.data.vote_count;
+    popularityValueEl.textContent = object.data.popularity;
+    original_titleValueEl.textContent = object.data.original_title;
+    overviewValueEl.textContent = object.data.overview;
+    genresValueEl.textContent = object.data.genres
+      .map(el => el.name)
+      .join(', ');
+    imageEl.src = event.target.closest('LI').querySelector('img').src;
+    modalWindowEl.showModal();
+  } catch (err) {
+    Notify.info('Sorry, this movie is currently unavailable!', {
+      fontSize: '16px',
+      width: '200px',
+    });
+  } finally {
+    Loading.remove();
+  }
 
-  if (localStorage.getItem(LISTNAME_TO_WATCH)) {
-    if (JSON.parse(localStorage.getItem(LISTNAME_TO_WATCH)).includes(movieId)) {
+  const getWatchedFromStorage = localStorage.getItem(LISTNAME_TO_WATCH);
+  const getQueueFromStorage = localStorage.getItem(LISTNAME_TO_QUEUE);
+
+  if (getWatchedFromStorage) {
+    if (JSON.parse(getWatchedFromStorage).includes(movieId)) {
       addToWatchedListBtn.textContent = 'REMOVE FROM WATCHED';
       addToWatchedListBtn.style.color = 'white';
       addToWatchedListBtn.style.backgroundColor = '#ff6b02';
     }
-    if (
-      !JSON.parse(localStorage.getItem(LISTNAME_TO_WATCH)).includes(movieId)
-    ) {
+    if (!JSON.parse(getWatchedFromStorage).includes(movieId)) {
       addToWatchedListBtn.style.backgroundColor = 'white';
       addToWatchedListBtn.style.color = 'black';
       addToWatchedListBtn.textContent = 'ADD TO WATCHED';
     }
   }
 
-  if (localStorage.getItem(LISTNAME_TO_QUEUE)) {
-    if (JSON.parse(localStorage.getItem(LISTNAME_TO_QUEUE)).includes(movieId)) {
+  if (getQueueFromStorage) {
+    if (JSON.parse(getQueueFromStorage).includes(movieId)) {
       addToQueueListBtn.textContent = 'REMOVE FROM QUEUE';
       addToQueueListBtn.style.color = 'white';
       addToQueueListBtn.style.backgroundColor = '#ff6b02';
     }
-    if (
-      !JSON.parse(localStorage.getItem(LISTNAME_TO_QUEUE)).includes(movieId)
-    ) {
+    if (!JSON.parse(getQueueFromStorage).includes(movieId)) {
       addToQueueListBtn.style.backgroundColor = 'white';
       addToQueueListBtn.style.color = 'black';
       addToQueueListBtn.textContent = 'ADD TO QUEUE';
     }
   }
 
-  newMovie
-    .getMovieTrailerByID(movieId)
-    .then(response => {
-      let trailerKey = response.data.results[0].key;
-      // showTrailerBtn.href = `https://www.youtube.com/watch?v=${trailerKey}`
-      // youtubeTrailerEl.src = `https://www.youtube.com/embed/${trailerKey}`;
-      // youtubeContainerEl.style.display = 'flex';
-      youtubeContainerEl.innerHTML = TrailerTemplate(trailerKey);
-    })
-    .catch(err => {
-      youtubeContainerEl.innerHTML = '';
-      console.log(err.message);
-    });
+  try {
+    const response = await newMovie.getMovieTrailerByID(movieId);
+
+    let trailerKey = response.data.results[0].key;
+    // showTrailerBtn.href = `https://www.youtube.com/watch?v=${trailerKey}`
+    // youtubeTrailerEl.src = `https://www.youtube.com/embed/${trailerKey}`;
+    // youtubeContainerEl.style.display = 'flex';
+    youtubeContainerEl.innerHTML = TrailerTemplate(trailerKey);
+  } catch (err) {
+    youtubeContainerEl.innerHTML = '';
+    console.log(err.message);
+  }
 };
 
 const onClickCloseModal = event => {
@@ -119,16 +117,18 @@ const onClickCloseModal = event => {
     event.target.closest('.modal_close_btn')
   ) {
     modalWindowEl.close();
-    // youtubeTrailerEl.src = '';
+    youtubeContainerEl.innerHTML = TrailerTemplate('');
   }
 };
 
 const addToWatchedList = event => {
+  const getWatchedFromStorage = localStorage.getItem(LISTNAME_TO_WATCH);
+
   let movieIdModal = event.target.dataset.movieId;
-  if (JSON.parse(localStorage.getItem(LISTNAME_TO_WATCH)) === null) {
+  if (JSON.parse(getWatchedFromStorage) === null) {
     addedToWatchedArray = [];
   } else {
-    addedToWatchedArray = JSON.parse(localStorage.getItem(LISTNAME_TO_WATCH));
+    addedToWatchedArray = JSON.parse(getWatchedFromStorage);
   }
 
   if (addedToWatchedArray.includes(movieIdModal)) {
@@ -142,7 +142,6 @@ const addToWatchedList = event => {
         `[data-id="${movieIdModal}"]`
       );
 
-      // modalWindowEl.close();
       if (elementClassList.includes('watched')) {
         setTimeout(() => {
           itemDelete.remove();
@@ -174,12 +173,14 @@ const addToWatchedList = event => {
 };
 
 const addToQueueList = event => {
+  const getQueueFromStorage = localStorage.getItem(LISTNAME_TO_QUEUE);
+
   let movieIdModal = event.target.dataset.movieId;
 
-  if (JSON.parse(localStorage.getItem(LISTNAME_TO_QUEUE)) === null) {
+  if (JSON.parse(getQueueFromStorage) === null) {
     addedToQueueArray = [];
   } else {
-    addedToQueueArray = JSON.parse(localStorage.getItem(LISTNAME_TO_QUEUE));
+    addedToQueueArray = JSON.parse(getQueueFromStorage);
   }
 
   if (addedToQueueArray.includes(movieIdModal)) {
@@ -193,7 +194,6 @@ const addToQueueList = event => {
         `[data-id="${movieIdModal}"]`
       );
 
-      // modalWindowEl.close();
       if (elementClassList.includes('queue')) {
         setTimeout(() => {
           itemDelete.remove();
