@@ -18,11 +18,12 @@
     "url": "https://github.com/goitacademy/parcel-project-template/issues"
   },
   "dependencies": {
+    "@swc/helpers": "^0.4.14",
     "axios": "^1.2.0",
-    "firebase": "^9.14.0",
-    "firebaseui": "^6.0.2",
+    "handlebars": "^4.7.7",
     "modern-normalize": "^1.1.0",
     "notiflix": "^3.2.5",
+    "regenerator-runtime": "^0.13.11",
     "simplelightbox": "^2.11.0",
     "tui-pagination": "^3.4.1"
   },
@@ -37,5 +38,8 @@
     "process": "^0.11.10"
   },
   "browserslist": "> 0.5%, last 2 versions, not dead",
-  "main": "index.js"
+  "main": "index.js",
+  "targets": {
+    "main": false
+  }
 }

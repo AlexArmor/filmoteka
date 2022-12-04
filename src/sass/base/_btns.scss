@@ -14,7 +14,10 @@
   border: 1px solid $light-color;
   color: $light-color;
   background-color: transparent;
-  transition: background-color 250ms cubic-bezier(0.4, 0, 0.2, 1), color 250ms cubic-bezier(0.4, 0, 0.2, 1), scale 250ms cubic-bezier(0.4, 0, 0.2, 1), border-style 250ms cubic-bezier(0.4, 0, 0.2, 1);
+  transition: background-color 250ms cubic-bezier(0.4, 0, 0.2, 1),
+    color 250ms cubic-bezier(0.4, 0, 0.2, 1),
+    scale 250ms cubic-bezier(0.4, 0, 0.2, 1),
+    border-style 250ms cubic-bezier(0.4, 0, 0.2, 1);
 
   &:hover {
     background: $press-color;
@@ -25,5 +28,58 @@
   &:focus {
     background: $press-color;
     color: $light-color;
+  }
+}
+
+.btn-up {
+  position: fixed;
+  background-color: $press-color;
+  right: 20px;
+  bottom: 50px;
+  border-radius: 8px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: opacity 0.15s ease-in-out, transform 0.3s ease-in-out;
+  width: 50px;
+  height: 50px;
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.btn-up_hide {
+  display: none;
+}
+
+.btn-up_hiding {
+  opacity: 0;
+  transform: translateY(100px);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .btn-up:hover {
+    background-color: $press-color-darker;
+  }
+}
+
+.btn-up__icon {
+  fill: $light-color;
+}
+
+.dont-touch {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 20px;
+  width: 150px;
+  height: 70px;
+  background-color: red;
+  border-radius: 8px;
+  margin: 40px auto 0;
+
+  &:hover {
+    background-color: rgb(193, 0, 0);
+    scale: 1.1;
   }
 }

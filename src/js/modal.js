@@ -1,9 +1,13 @@
 import { Notify, Loading } from 'notiflix';
 import ApiService from './apiService';
-
+import TrailerTemplate from '../templates/trailerTemplate.hbs';
+import nothingImg from '../images/empty_library.jpg';
 const youtubeContainerEl = document.querySelector(
   '.modal_youtube_video_container'
 );
+
+const libraryWatch = document.querySelector('.watched');
+const libraryQueue = document.querySelector('.queue');
 const youtubeTrailerEl = document.querySelector('.modal_youtube_video');
 
 const movieItemEl = document.querySelector('.movie-list');
@@ -34,7 +38,6 @@ const onClickOpenModal = event => {
     svgSize: '100px',
     cssAnimationDuration: 0,
   });
-
   const movieId = event.target.closest('li').getAttribute('data-id');
   const newMovie = new ApiService();
 
@@ -63,26 +66,34 @@ const onClickOpenModal = event => {
     )
     .finally(Loading.remove);
 
-  if (JSON.parse(localStorage.getItem(LISTNAME_TO_WATCH)).includes(movieId)) {
-    addToWatchedListBtn.textContent = 'REMOVE FROM WATCHED';
-    addToWatchedListBtn.style.color = 'white';
-    addToWatchedListBtn.style.backgroundColor = '#ff6b02';
-  }
-  if (!JSON.parse(localStorage.getItem(LISTNAME_TO_WATCH)).includes(movieId)) {
-    addToWatchedListBtn.style.backgroundColor = 'white';
-    addToWatchedListBtn.style.color = 'black';
-    addToWatchedListBtn.textContent = 'ADD TO WATCHED';
+  if (localStorage.getItem(LISTNAME_TO_WATCH)) {
+    if (JSON.parse(localStorage.getItem(LISTNAME_TO_WATCH)).includes(movieId)) {
+      addToWatchedListBtn.textContent = 'REMOVE FROM WATCHED';
+      addToWatchedListBtn.style.color = 'white';
+      addToWatchedListBtn.style.backgroundColor = '#ff6b02';
+    }
+    if (
+      !JSON.parse(localStorage.getItem(LISTNAME_TO_WATCH)).includes(movieId)
+    ) {
+      addToWatchedListBtn.style.backgroundColor = 'white';
+      addToWatchedListBtn.style.color = 'black';
+      addToWatchedListBtn.textContent = 'ADD TO WATCHED';
+    }
   }
 
-  if (JSON.parse(localStorage.getItem(LISTNAME_TO_QUEUE)).includes(movieId)) {
-    addToQueueListBtn.textContent = 'REMOVE FROM QUEUE';
-    addToQueueListBtn.style.color = 'white';
-    addToQueueListBtn.style.backgroundColor = '#ff6b02';
-  }
-  if (!JSON.parse(localStorage.getItem(LISTNAME_TO_QUEUE)).includes(movieId)) {
-    addToQueueListBtn.style.backgroundColor = 'white';
-    addToQueueListBtn.style.color = 'black';
-    addToQueueListBtn.textContent = 'ADD TO QUEUE';
+  if (localStorage.getItem(LISTNAME_TO_QUEUE)) {
+    if (JSON.parse(localStorage.getItem(LISTNAME_TO_QUEUE)).includes(movieId)) {
+      addToQueueListBtn.textContent = 'REMOVE FROM QUEUE';
+      addToQueueListBtn.style.color = 'white';
+      addToQueueListBtn.style.backgroundColor = '#ff6b02';
+    }
+    if (
+      !JSON.parse(localStorage.getItem(LISTNAME_TO_QUEUE)).includes(movieId)
+    ) {
+      addToQueueListBtn.style.backgroundColor = 'white';
+      addToQueueListBtn.style.color = 'black';
+      addToQueueListBtn.textContent = 'ADD TO QUEUE';
+    }
   }
 
   newMovie
@@ -90,12 +101,12 @@ const onClickOpenModal = event => {
     .then(response => {
       let trailerKey = response.data.results[0].key;
       // showTrailerBtn.href = `https://www.youtube.com/watch?v=${trailerKey}`
-      youtubeTrailerEl.src = `https://www.youtube.com/embed/${trailerKey}`;
-      youtubeContainerEl.style.display = 'flex';
+      // youtubeTrailerEl.src = `https://www.youtube.com/embed/${trailerKey}`;
+      // youtubeContainerEl.style.display = 'flex';
+      youtubeContainerEl.innerHTML = TrailerTemplate(trailerKey);
     })
     .catch(err => {
-      youtubeContainerEl.style.display = 'none';
-
+      youtubeContainerEl.innerHTML = '';
       console.log(err.message);
     });
 };
@@ -106,7 +117,7 @@ const onClickCloseModal = event => {
     event.target.closest('.modal_close_btn')
   ) {
     modalWindowEl.close();
-    youtubeTrailerEl.src = '';
+    // youtubeTrailerEl.src = '';
   }
 };
 
@@ -123,6 +134,21 @@ const addToWatchedList = event => {
     addToWatchedListBtn.style.backgroundColor = 'white';
     addToWatchedListBtn.style.color = 'black';
     addToWatchedListBtn.textContent = 'ADD TO WATCHED';
+
+    if (location.pathname.includes('library')) {
+      const itemDelete = libraryWatch.querySelector(
+        `[data-id="${movieIdModal}"]`
+      );
+
+      modalWindowEl.close();
+      setTimeout(() => {
+        itemDelete.remove();
+      }, 300);
+      if (addedToWatchedArray.length === 0) {
+        markupImg(libraryWatch);
+      }
+    }
+
     return localStorage.setItem(
       LISTNAME_TO_WATCH,
       JSON.stringify(addedToWatchedArray)
@@ -154,6 +180,21 @@ const addToQueueList = event => {
     addToQueueListBtn.style.backgroundColor = 'white';
     addToQueueListBtn.style.color = 'black';
     addToQueueListBtn.textContent = 'ADD TO QUEUE';
+
+    if (location.pathname.includes('library')) {
+      const itemDelete = libraryQueue.querySelector(
+        `[data-id="${movieIdModal}"]`
+      );
+
+      modalWindowEl.close();
+      setTimeout(() => {
+        itemDelete.remove();
+      }, 300);
+      if (addedToQueueArray.length === 0) {
+        markupImg(libraryQueue);
+      }
+    }
+
     return localStorage.setItem(
       LISTNAME_TO_QUEUE,
       JSON.stringify(addedToQueueArray)
@@ -171,9 +212,28 @@ const addToQueueList = event => {
   }
 };
 
+if (location.pathname.includes('library')) {
+  libraryWatch.addEventListener('click', onClickOpenModal);
+  libraryQueue.addEventListener('click', onClickOpenModal);
+}
+
 movieItemEl.addEventListener('click', onClickOpenModal);
 window.addEventListener('click', onClickCloseModal);
 addToWatchedListBtn.addEventListener('click', addToWatchedList);
 addToQueueListBtn.addEventListener('click', addToQueueList);
 
 // localStorage.clear()
+
+export function markupImg(library) {
+  const markup = `
+  <li class='empty__item'>
+  <img
+    class='empty__img'
+    width='440'
+    src="${nothingImg}"
+    loading='lazy'
+  />
+  </li>
+`;
+  library.innerHTML = markup;
+}
