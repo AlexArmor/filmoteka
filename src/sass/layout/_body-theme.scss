@@ -1,0 +1,38 @@
+body.dark {
+  background-image: url('../images/dark-theme/dark-theme-bg.jpg');
+  background-position: center;
+  background-size: contain;
+  background-repeat: repeat-y;
+
+  .movie__name {
+    color: $light-color;
+  }
+
+  .tui-page-btn,
+  .tui-first,
+  .tui-last {
+    color: $light-color;
+    &:hover {
+      background: $press-color;
+    }
+  }
+  .tui-is-selected {
+    color: $light-color;
+  }
+
+  .tui-prev,
+  .tui-next,
+  .tui-first,
+  .tui-last {
+    background: $footer-bg-color;
+  }
+
+  .footer-section {
+    color: $footer-bg-color;
+    background-color: $dark-color;
+  }
+
+  .footer-section__link {
+    color: $footer-bg-color;
+  }
+}
