@@ -2,7 +2,8 @@ body.theme-dark {
   background-image: url('../images/dark-theme/dark-theme-bg.jpg');
   background-position: center;
   background-size: contain;
-  background-repeat: repeat-y;
+
+  background-repeat: repeat;
 
   .movie__name {
     color: $light-color;
